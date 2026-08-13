@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f6f6f3" />
+    <title>GameRank — Top 10 Jogos</title>
+    <style>
+        :root {
+            --bg: #f6f6f3;
+            --panel: rgba(255,255,255,.72);
+            --text: #101010;
+            --muted: #75756f;
+            --line: #deded8;
+            --soft: #ecece7;
+            --accent: #c9ff57;
+            --accent-dark: #1b2a00;
+            --shadow: 0 16px 50px rgba(17,17,14,.08);
+            --radius: 18px;
+        }
+
+        * { box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background:
+                    radial-gradient(circle at 8% 2%, rgba(201,255,87,.18), transparent 25%),
+                    radial-gradient(circle at 92% 18%, rgba(0,0,0,.045), transparent 22%),
+                    var(--bg);
+            color: var(--text);
+            font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        button, input, select { font: inherit; }
+        button { cursor: pointer; }
+        a { color: inherit; text-decoration: none; }
+
+        .shell {
+            width: min(1120px, calc(100% - 32px));
+            margin: 0 auto;
+        }
+
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            backdrop-filter: blur(18px);
+            background: rgba(246,246,243,.82);
+            border-bottom: 1px solid rgba(222,222,216,.75);
+        }
+
+        .nav {
+            height: 72px;
+            display: flex;
+            align-items: center;
+            gap: 28px;
+        }
+
+        .brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 900;
+            letter-spacing: -.04em;
+            font-size: 20px;
+            white-space: nowrap;
+        }
+
+        .brand-mark {
+            width: 30px;
+            height: 30px;
+            display: grid;
+            place-items: center;
+            border-radius: 9px;
+            background: #101010;
+            color: var(--accent);
+            font-size: 15px;
+            transform: rotate(-4deg);
+            box-shadow: 0 6px 18px rgba(0,0,0,.12);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 22px;
+            color: #4a4a45;
+            font-size: 14px;
+            font-weight: 650;
+        }
+
+        .nav-links a:hover { color: #000; }
+        .nav-spacer { flex: 1; }
+
+        .nav-pill {
+            border: 1px solid #cfcfc7;
+            background: rgba(255,255,255,.7);
+            padding: 9px 13px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 750;
+        }
+
+        .hero {
+            padding: 92px 0 52px;
+            text-align: center;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid var(--line);
+            background: rgba(255,255,255,.65);
+            padding: 8px 12px;
+            border-radius: 999px;
+            color: #5b5b55;
+            font-size: 12px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+        }
+
+        .eyebrow::before {
+            content: "";
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent);
+            box-shadow: 0 0 0 4px rgba(201,255,87,.2);
+        }
+
+        h1 {
+            max-width: 860px;
+            margin: 22px auto 16px;
+            font-size: clamp(48px, 7.8vw, 88px);
+            line-height: .94;
+            letter-spacing: -.072em;
+            font-weight: 950;
+        }
+
+        .hero p {
+            max-width: 650px;
+            margin: 0 auto;
+            font-size: clamp(16px, 2vw, 19px);
+            line-height: 1.55;
+            color: #64645e;
+        }
+
+        .search-wrap {
+            width: min(720px, 100%);
+            margin: 30px auto 0;
+            position: relative;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #8a8a83;
+            pointer-events: none;
+            font-size: 17px;
+        }
+
+        #search {
+            width: 100%;
+            border: 1px solid #d4d4cd;
+            border-radius: 16px;
+            padding: 17px 18px 17px 48px;
+            outline: none;
+            background: rgba(255,255,255,.83);
+            color: #111;
+            box-shadow: 0 10px 30px rgba(0,0,0,.055);
+            transition: .2s ease;
+        }
+
+        #search:focus {
+            border-color: #aaa9a0;
+            box-shadow: 0 12px 34px rgba(0,0,0,.085), 0 0 0 4px rgba(201,255,87,.18);
+        }
+
+        .quick-stats {
+            margin: 28px auto 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 9px 20px;
+            color: #74746e;
+            font-size: 13px;
+        }
+
+        .quick-stats b { color: #222; }
+        .dot { opacity: .45; }
+
+        .section {
+            padding: 22px 0 74px;
+        }
+
+        .section-head {
+            display: flex;
+            align-items: end;
+            gap: 18px;
+            margin-bottom: 18px;
+        }
+
+        .section-head h2 {
+            margin: 0;
+            font-size: 22px;
+            letter-spacing: -.035em;
+        }
+
+        .section-head p {
+            margin: 4px 0 0;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .head-spacer { flex: 1; }
+
+        .filters {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        select, .reset-btn {
+            border: 1px solid var(--line);
+            background: rgba(255,255,255,.7);
+            border-radius: 10px;
+            min-height: 38px;
+            padding: 0 11px;
+            color: #33332f;
+            font-size: 12px;
+            font-weight: 720;
+            outline: none;
+        }
+
+        .reset-btn:hover { background: #fff; }
+
+        .board {
+            overflow: hidden;
+            border: 1px solid var(--line);
+            background: rgba(255,255,255,.64);
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .board-head, .game-row {
+            display: grid;
+            grid-template-columns: 58px minmax(330px, 1.9fr) minmax(130px, .7fr) 100px 100px 42px;
+            align-items: center;
+            column-gap: 16px;
+        }
+
+        .board-head {
+            padding: 15px 18px;
+            border-bottom: 1px solid var(--line);
+            color: #888881;
+            font-size: 11px;
+            font-weight: 850;
+            text-transform: uppercase;
+            letter-spacing: .075em;
+        }
+
+        .game-row {
+            position: relative;
+            padding: 14px 18px;
+            border-bottom: 1px solid var(--line);
+            transition: transform .18s ease, background .18s ease;
+        }
+
+        .game-row:last-child { border-bottom: 0; }
+        .game-row:hover { background: rgba(255,255,255,.96); }
+
+        .rank {
+            font-size: 18px;
+            font-weight: 950;
+            letter-spacing: -.04em;
+            color: #2d2d29;
+        }
+
+        .rank.medal {
+            font-size: 22px;
+            filter: saturate(.85);
+        }
+
+        .game-main {
+            min-width: 0;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .cover {
+            width: 92px;
+            height: 52px;
+            flex: 0 0 auto;
+            object-fit: cover;
+            border-radius: 9px;
+            background: linear-gradient(135deg, #242424, #7a7a72);
+            box-shadow: 0 7px 18px rgba(0,0,0,.16);
+        }
+
+        .game-text { min-width: 0; }
+        .game-title {
+            margin: 0 0 4px;
+            font-size: 14px;
+            font-weight: 900;
+            letter-spacing: -.015em;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .game-sub {
+            color: var(--muted);
+            font-size: 11.5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .genre, .year {
+            color: #55554f;
+            font-size: 12px;
+            font-weight: 650;
+        }
+
+        .score {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: max-content;
+            min-width: 54px;
+            padding: 7px 9px;
+            background: #111;
+            color: #fff;
+            border-radius: 9px;
+            font-size: 12px;
+            font-weight: 900;
+            letter-spacing: -.02em;
+        }
+
+        .score.top {
+            background: var(--accent);
+            color: var(--accent-dark);
+        }
+
+        .toggle {
+            width: 34px;
+            height: 34px;
+            border: 0;
+            border-radius: 10px;
+            background: transparent;
+            color: #74746d;
+            display: grid;
+            place-items: center;
+            transition: .18s ease;
+        }
+
+        .game-row:hover .toggle { background: var(--soft); color: #111; }
+        .toggle span { transition: transform .2s ease; }
+        .game-row.open .toggle span { transform: rotate(45deg); }
+
+        .details {
+            grid-column: 2 / -1;
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows .25s ease;
+        }
+
+        .details > div { overflow: hidden; }
+        .game-row.open .details { grid-template-rows: 1fr; }
+
+        .details-inner {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 20px;
+            align-items: center;
+            padding: 14px 0 4px;
+            color: #65655e;
+            font-size: 12px;
+            line-height: 1.55;
+        }
+
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            padding: 7px 10px;
+            border-radius: 999px;
+            background: #f0f0eb;
+            border: 1px solid #e0e0da;
+            color: #33332f;
+            font-size: 11px;
+            font-weight: 850;
+            white-space: nowrap;
+        }
+
+        .empty {
+            display: none;
+            padding: 52px 20px;
+            text-align: center;
+            color: var(--muted);
+        }
+
+        .empty b {
+            display: block;
+            margin-bottom: 6px;
+            color: #222;
+            font-size: 16px;
+        }
+
+        .note {
+            margin-top: 14px;
+            color: #81817b;
+            font-size: 11px;
+            line-height: 1.5;
+        }
+
+        footer {
+            border-top: 1px solid var(--line);
+            padding: 30px 0 46px;
+            color: #7f7f79;
+            font-size: 12px;
+        }
+
+        .footer-line {
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .footer-brand { color: #282824; font-weight: 900; }
+
+        @media (max-width: 880px) {
+            .nav-links { display: none; }
+            .hero { padding-top: 70px; }
+            .board { background: transparent; border: 0; box-shadow: none; overflow: visible; }
+            .board-head { display: none; }
+            .game-row {
+                grid-template-columns: 42px minmax(0,1fr) 46px;
+                gap: 8px;
+                margin-bottom: 10px;
+                border: 1px solid var(--line) !important;
+                border-radius: 16px;
+                background: rgba(255,255,255,.72);
+                box-shadow: 0 10px 28px rgba(0,0,0,.045);
+            }
+            .rank { grid-column: 1; }
+            .game-main { grid-column: 2; }
+            .toggle { grid-column: 3; grid-row: 1; }
+            .genre, .year, .score-wrap { display: none; }
+            .details { grid-column: 2 / 4; }
+            .details-inner { grid-template-columns: 1fr; gap: 10px; }
+        }
+
+        @media (max-width: 560px) {
+            .shell { width: min(100% - 20px, 1120px); }
+            .nav { height: 62px; }
+            .nav-pill { display: none; }
+            .hero { padding: 56px 0 38px; }
+            h1 { letter-spacing: -.06em; }
+            .section-head { align-items: stretch; flex-direction: column; }
+            .head-spacer { display: none; }
+            .filters { width: 100%; }
+            select, .reset-btn { flex: 1; }
+            .game-row { padding: 12px; grid-template-columns: 32px minmax(0,1fr) 38px; }
+            .rank { font-size: 15px; }
+            .cover { width: 78px; height: 46px; }
+            .game-title { font-size: 13px; }
+            .game-sub { max-width: 200px; }
+            .quick-stats { font-size: 12px; }
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div class="shell nav">
+        <a class="brand" href="#topo" aria-label="GameRank, início">
+            <span class="brand-mark">G</span>
+            <span>GameRank</span>
+        </a>
+        <nav class="nav-links" aria-label="Navegação principal">
+            <a href="#ranking">Ranking</a>
+            <a href="#ranking">Clássicos</a>
+            <a href="#ranking">Indies</a>
+        </nav>
+        <div class="nav-spacer"></div>
+        <a class="nav-pill" href="#ranking">Ver top 10 ↓</a>
+    </div>
+</header>
+
+<main id="topo">
+    <section class="hero shell">
+        <span class="eyebrow">Ranking editorial · todos os tempos</span>
+        <h1>10 jogos que você precisa jogar.</h1>
+        <p>Uma seleção direta ao ponto: mundos memoráveis, gameplay impecável e jogos que continuam bons mesmo anos depois.</p>
+
+        <div class="search-wrap">
+            <span class="search-icon">⌕</span>
+            <input id="search" type="search" autocomplete="off" placeholder="Busque por jogo, estúdio ou gênero..." aria-label="Buscar no ranking" />
+        </div>
+
+        <div class="quick-stats" aria-label="Resumo do ranking">
+            <span><b>10</b> jogos</span><span class="dot">•</span>
+            <span><b>8</b> estúdios</span><span class="dot">•</span>
+            <span><b>9.55</b> nota média</span><span class="dot">•</span>
+            <span>Atualizado em <b>2026</b></span>
+        </div>
+    </section>
+
+    <section class="section shell" id="ranking">
+        <div class="section-head">
+            <div>
+                <h2>Leaderboard</h2>
+                <p>Clique em qualquer jogo para ver por que ele está no top 10.</p>
+            </div>
+            <div class="head-spacer"></div>
+            <div class="filters">
+                <select id="genreFilter" aria-label="Filtrar por gênero">
+                    <option value="all">Todos os gêneros</option>
+                    <option value="RPG">RPG</option>
+                    <option value="Ação">Ação</option>
+                    <option value="Metroidvania">Metroidvania</option>
+                    <option value="Roguelike">Roguelike</option>
+                    <option value="Puzzle">Puzzle</option>
+                </select>
+                <select id="sort" aria-label="Ordenar ranking">
+                    <option value="rank">Ordem do ranking</option>
+                    <option value="score">Maior nota</option>
+                    <option value="year">Mais recentes</option>
+                </select>
+                <button class="reset-btn" id="reset" type="button">Limpar</button>
+            </div>
+        </div>
+
+        <div class="board" id="board">
+            <div class="board-head">
+                <div>#</div>
+                <div>Jogo</div>
+                <div>Gênero</div>
+                <div>Ano</div>
+                <div>Nota</div>
+                <div></div>
+            </div>
+
+            <div id="rows"></div>
+            <div class="empty" id="empty">
+                <b>Nenhum jogo encontrado.</b>
+                Tente outro nome ou remova os filtros.
+            </div>
+        </div>
+
+        <p class="note">* As notas representam uma curadoria editorial deste projeto demonstrativo. As imagens são carregadas de artes oficiais disponíveis na CDN da Steam; o arquivo HTML não inclui dependências locais adicionais.</p>
+    </section>
+</main>
+
+<footer>
+    <div class="shell footer-line">
+        <span><span class="footer-brand">GameRank</span> — jogos que valem seu tempo.</span>
+        <span>Feito em um único arquivo HTML.</span>
+    </div>
+</footer>
+
+<script>
+    const games = [
+        {
+            rank: 1,
+            title: "Red Dead Redemption 2",
+            studio: "Rockstar Games",
+            genre: "Ação",
+            year: 2018,
+            score: 9.9,
+            image: "https://cdn.akamai.steamstatic.com/steam/apps/1174180/header.jpg",
+            fallback: "#8f251d",
+            tag: "Narrativa absurda",
+            desc: "Um mundo aberto que parece vivo de verdade. A força está nos detalhes, na construção dos personagens e em uma campanha que transforma ritmo lento em imersão."
+        },
+        {
+            rank: 2,
+            title: "Baldur's Gate 3",
+            studio: "Larian Studios",
+            genre: "RPG",
+            year: 2023,
+            score: 9.8,
+            image: "https://cdn.akamai.steamstatic.com/steam/apps/1086940/header.jpg",
+            fallback: "#4f315f",
+            tag: "Liberdade total",
+            desc: "RPG de escolhas em que o jogo quase sempre responde ao que você tenta fazer. Combate tático, personagens excelentes e uma quantidade ridícula de possibilidades."
+        },
+        {
+            rank: 3,
+            title: "Elden Ring",
+            studio: "FromSoftware",
+            genre: "RPG",
+            year: 2022,
+            score: 9.8,
+            image: "https://cdn.akamai.steamstatic.com/steam/apps/1245620/header.jpg",
+            fallback: "#605334",
+            tag: "Exploração perfeita",
+            desc: "Exploração sem excesso de marcações, chefes memoráveis e um mundo que recompensa curiosidade. É a fórmula Souls levada para uma escala enorme."
+        },
+        {
+            rank: 4,
+            title: "The Witcher 3: Wild Hunt",
+            studio: "CD PROJEKT RED",
+            genre: "RPG",
+            year: 2015,
+            score: 9.7,
+            image: "https://cdn.akamai.steamstatic.com/steam/apps/292030/header.jpg",
+            fallback: "#6e777b",
+            tag: "Quests lendárias",
+            desc: "Poucos RPGs tratam missões secundárias com tanto cuidado. O mundo, os diálogos e as histórias pequenas continuam sendo referência."
+        },
+        {
+            rank: 5,
+            title: "Cyberpunk 2077",
+            studio: "CD PROJEKT RED",
+            genre: "RPG",
+            year: 2020,
+            score: 9.5,
+            image: "https://cdn.akamai.steamstatic.com/steam/apps/1091500/header.jpg",
+            fallback: "#dfc900",
+            tag: "Atmosfera única",
+            desc: "Night City é o protagonista. Combate flexível, excelente direção de arte e uma narrativa que fica muito mais forte quando você desacelera para viver a cidade."
+        },
+        {
+            rank: 6,
+            title: "God of War",
+            studio: "Santa Monica Studio",
+            genre: "Ação",
+            year: 2018,
+            score: 9.5,
+            image: "https://cdn.akamai.steamstatic.com/steam/apps/1593500/header.jpg",
+            fallback: "#59717b",
+            tag: "Combate cinematográfico",
+            desc: "Uma reinvenção que troca espetáculo vazio por peso, precisão e uma relação entre pai e filho que conduz toda a jornada."
+        },
+        {
+            rank: 7,
+            title: "Hollow Knight",
+            studio: "Team Cherry",
+            genre: "Metroidvania",
+            year: 2017,
+            score: 9.4,
+            image: "https://cdn.akamai.steamstatic.com/steam/apps/367520/header.jpg",
+            fallback: "#223040",
+            tag: "Indie essencial",
+            desc: "Mapa gigantesco, trilha impecável, combate preciso e uma direção de arte instantaneamente reconhecível. Um dos melhores metroidvanias já feitos."
+        },
+        {
+            rank: 8,
+            title: "Hades",
+            studio: "Supergiant Games",
+            genre: "Roguelike",
+            year: 2020,
+            score: 9.4,
+            image: "https://cdn.akamai.steamstatic.com/steam/apps/1145360/header.jpg",
+            fallback: "#70282b",
+            tag: "Loop viciante",
+            desc: "Cada tentativa faz sentido dentro da história. O combate é rápido, as builds mudam bastante e os personagens fazem você querer voltar mesmo depois de morrer."
+        },
+        {
+            rank: 9,
+            title: "Sekiro: Shadows Die Twice",
+            studio: "FromSoftware",
+            genre: "Ação",
+            year: 2019,
+            score: 9.3,
+            image: "https://cdn.akamai.steamstatic.com/steam/apps/814380/header.jpg",
+            fallback: "#74402a",
+            tag: "Combate impecável",
+            desc: "Um sistema de combate quase rítmico em que defesa, postura e agressividade importam mais do que montar a build perfeita. Difícil e extremamente recompensador."
+        },
+        {
+            rank: 10,
+            title: "Portal 2",
+            studio: "Valve",
+            genre: "Puzzle",
+            year: 2011,
+            score: 9.2,
+            image: "https://cdn.akamai.steamstatic.com/steam/apps/620/header.jpg",
+            fallback: "#6b98aa",
+            tag: "Design genial",
+            desc: "Puzzle com curva de aprendizado brilhante, humor afiado e uma campanha co-op que parece outro jogo inteiro. Envelheceu absurdamente bem."
+        }
+    ];
+
+    const rows = document.getElementById('rows');
+    const search = document.getElementById('search');
+    const genreFilter = document.getElementById('genreFilter');
+    const sort = document.getElementById('sort');
+    const reset = document.getElementById('reset');
+    const empty = document.getElementById('empty');
+
+    const medal = rank => ({1:'🥇', 2:'🥈', 3:'🥉'}[rank] || String(rank).padStart(2, '0'));
+
+    function render() {
+        const term = search.value.trim().toLowerCase();
+        const genre = genreFilter.value;
+        let list = games.filter(game => {
+            const haystack = `${game.title} ${game.studio} ${game.genre}`.toLowerCase();
+            return (!term || haystack.includes(term)) && (genre === 'all' || game.genre === genre);
+        });
+
+        if (sort.value === 'score') list.sort((a,b) => b.score - a.score || a.rank - b.rank);
+        if (sort.value === 'year') list.sort((a,b) => b.year - a.year || a.rank - b.rank);
+        if (sort.value === 'rank') list.sort((a,b) => a.rank - b.rank);
+
+        rows.innerHTML = list.map(game => `
+        <article class="game-row" data-rank="${game.rank}">
+          <div class="rank ${game.rank <= 3 ? 'medal' : ''}">${medal(game.rank)}</div>
+          <div class="game-main">
+            <img
+              class="cover"
+              src="${game.image}"
+              alt="Arte oficial de ${game.title}"
+              loading="lazy"
+              onerror="this.removeAttribute('src');this.style.background='${game.fallback}';this.alt='Imagem indisponível de ${game.title}'"
+            />
+            <div class="game-text">
+              <h3 class="game-title">${game.title}</h3>
+              <div class="game-sub">${game.studio}</div>
+            </div>
+          </div>
+          <div class="genre">${game.genre}</div>
+          <div class="year">${game.year}</div>
+          <div class="score-wrap"><span class="score ${game.rank <= 3 ? 'top' : ''}">${game.score.toFixed(1)}</span></div>
+          <button class="toggle" type="button" aria-label="Ver detalhes de ${game.title}" aria-expanded="false"><span>＋</span></button>
+          <div class="details">
+            <div>
+              <div class="details-inner">
+                <span>${game.desc}</span>
+                <span class="tag">${game.tag}</span>
+              </div>
+            </div>
+          </div>
+        </article>
+      `).join('');
+
+        empty.style.display = list.length ? 'none' : 'block';
+
+        document.querySelectorAll('.game-row').forEach(row => {
+            const btn = row.querySelector('.toggle');
+            const toggle = () => {
+                const open = row.classList.toggle('open');
+                btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+            };
+            btn.addEventListener('click', e => { e.stopPropagation(); toggle(); });
+            row.addEventListener('click', e => {
+                if (e.target.closest('button')) return;
+                toggle();
+            });
+        });
+    }
+
+    [search, genreFilter, sort].forEach(el => el.addEventListener(el === search ? 'input' : 'change', render));
+
+    reset.addEventListener('click', () => {
+        search.value = '';
+        genreFilter.value = 'all';
+        sort.value = 'rank';
+        render();
+        search.focus();
+    });
+
+    render();
+</script>
+</body>
+</html>
