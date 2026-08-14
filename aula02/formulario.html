@@ -4,97 +4,87 @@
     <meta charset="UTF-8">
     <title>Formulário</title>
 </head>
-  <body>
-    <head>
-      <h1>Escola Virtual</h1>
-      <h2>Formulário de Pré-Matricula</h2>
-    </head>
+<body>
+<header>
+    <h1>Escola Virtual</h1>
+    <h2>Formulário de Pré-Matrícula</h2>
+</header>
 
-    <main>
-      <table border="1">
-        <tbody>
-          <tr>
-            <td>
-              <h2>Dados Pessoais:</h2>
-              <form>
-                <labe>Nome do Aluno:</labe>
-                <input type="text">
-                <br>
-                <br>
-                <labe>Nascimento (dd/mm/aaaa):</labe>
-                <input type="date">
-                <br>
-                <br>
-                <labe>Nome da Mãe:</labe>
-                <input type="text">
-                <br>
-                <br>
-                <labe>Nome do Pai:</labe>
-                <input type="text">
-                <br>
-                <br>
-                <labe>Telefone:</labe>
-                <input type="phone">
-                <br>
-                <br>
-                <labe>Email:</labe>
-                <input type="mail">
-                <br>
-                <br>
-              </form>
-            </td>
-          </tr>
+<main>
+    <form>
+        <fieldset>
+            <legend>Dados Pessoais:</legend>
 
-          <tr>
-            <td>
-              <h2>Informações de Matricula:</h2>
-              <form>
-                <label for="">Série</label>
-                <br>
-                <br>
-                <select name="Série" id="">
-                  <option>pré-escola</option>
-                  <option>ensino médio</option>
-                </select>
+            <label for="nome">Nome do Aluno:</label>
+            <input type="text" id="nome" name="nome">
 
-                <br>
-                <br>
+            <label for="nascimento">Nascimento (dd/mm/aaaa):</label>
+            <input type="date" id="nascimento" name="nascimento">
 
-                <label for="">Turno: </label>
-                <br>
-                <input type="radio">
-                <label for="">Manhã</label>
-                <br>
-                <input type="radio">
-                <label for="">Tarde</label>
+            <label for="mae">Nome da Mãe:</label>
+            <input type="text" id="mae" name="mae">
 
-                <br>
-                <label for="">Atividades Extracurriculares:</label>
-                <br>
-                <input type="checkbox">
-                <label for="">Informática</label>
-                <br>
-                <input type="checkbox">
-                <label for="">Música</label>
-                <br>
-                <input type="checkbox">
-                <label for="">Ballet</label>
-                <br>
-                <input type="checkbox">
-                <label for="">Pintura</label>
-                <br>
-                <input type="checkbox">
-                <label for="">Judô</label>
-                <br>
-                <input type="checkbox">
-                <label for="">Futebol</label>
-              </form>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <input type="submit">
-      <input type="reset">
-    </main>
-  </body>
+            <label for="pai">Nome do Pai:</label>
+            <input type="text" id="pai" name="pai">
+
+            <label for="ddd">Telefone:</label>
+            DDD (
+            <input type="tel" id="ddd" name="ddd" size="2">
+            )
+
+            <label for="telefone">Tel:</label>
+            <input type="tel" id="telefone" name="telefone">
+
+            <label for="ramal">Ramal:</label>
+            <input type="text" id="ramal" name="ramal">
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email">
+
+        </fieldset>
+        <fieldset>
+            <legend>Informações de Matrícula:</legend>
+
+            <label for="serie">Série:</label>
+
+            <select name="serie" id="serie">
+                <option value="pre-escola">Pré-escola</option>
+                <option value="ensino-medio">Ensino Médio</option>
+            </select>
+
+
+            <label>Turno:</label>
+
+            <input type="radio" id="manha" name="turno" value="manha">
+            <label for="manha">Manhã</label>
+
+            <input type="radio" id="tarde" name="turno" value="tarde">
+            <label for="tarde">Tarde</label>
+
+
+            <label>Atividades Extracurriculares:</label>
+
+            <input type="checkbox" id="informatica" name="atividades" value="informatica">
+            <label for="informatica">Informática</label>
+
+            <input type="checkbox" id="musica" name="atividades" value="musica">
+            <label for="musica">Música</label>
+
+            <input type="checkbox" id="ballet" name="atividades" value="ballet">
+            <label for="ballet">Ballet</label>
+
+            <input type="checkbox" id="pintura" name="atividades" value="pintura">
+            <label for="pintura">Pintura</label>
+
+            <input type="checkbox" id="judo" name="atividades" value="judo">
+            <label for="judo">Judô</label>
+
+            <input type="checkbox" id="futebol" name="atividades" value="futebol">
+            <label for="futebol">Futebol</label>
+        </fieldset>
+        <input type="submit" value="Enviar Formulário">
+        <input type="reset" value="Limpar">
+    </form>
+</main>
+</body>
 </html>
